@@ -47,5 +47,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            
             docker-compose -f /home/ec2-user/docker-compose.yaml down
+            
             docker-compose -f /home/ec2-user/docker-compose.yaml pull && docker-compose -f /home/ec2-user/docker-compose.yaml up -d
