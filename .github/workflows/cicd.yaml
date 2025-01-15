@@ -45,8 +45,6 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > key.pem
           chmod 600 key.pem
           scp -o StrictHostKeyChecking=no -i key.pem docker-compose.yaml ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Deploy to EC2 with Docker Compose
         uses: appleboy/ssh-action@v1.2.0
@@ -56,7 +54,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            set -e
             COMPOSE_FILE=/home/ec2-user/docker-compose.yaml
             docker-compose -f $COMPOSE_FILE down
             docker-compose -f $COMPOSE_FILE pull
