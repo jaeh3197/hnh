@@ -31,3 +31,21 @@ jobs:
           context: .
           push: true
           tags: hajupe/hnh-servers:1
+
+  deploy-to-ec2:
+    needs: docker-build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2 with Docker Compose
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker-compose -f /home/ec2-user/docker-compose.yaml down
+            docker-compose -f /home/ec2-user/docker-compose.yaml pull && docker-compose -f /home/ec2-user/docker.yaml up -d
