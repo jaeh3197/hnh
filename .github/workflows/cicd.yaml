@@ -40,6 +40,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Copy Docker Compose file to EC2
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+          scp -o StrictHostKeyChecking=no -i key.pem docker-compose.yaml ec2-user@${{ secrets.SSH_HOST }}:/home/ec2-user/
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
       - name: Deploy to EC2 with Docker Compose
         uses: appleboy/ssh-action@v1.2.0
         with:
