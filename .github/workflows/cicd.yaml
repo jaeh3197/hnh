@@ -40,6 +40,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Create .env file
+        run: |
+          echo "AWS_IAM_ACCESS_KEY=${{ secrets.AWS_IAM_ACCESS_KEY }}" >> .env
+          echo "AWS_IAM_SECRET_KEY=${{ secrets.AWS_IAM_SECRET_KEY }}" >> .env
+          echo "AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}" >> .env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
+          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env 
+          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "MYSQL_URL=${{ secrets.MYSQL_URL }}" >> .env
+          echo "JPA_HIBERNATE_DDL=${{ secrets.JPA_HIBERNATE_DDL }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
       - name: Copy Docker Compose file to EC2
         run: |
           echo "${{ secrets.SSH_KEY }}" > key.pem
